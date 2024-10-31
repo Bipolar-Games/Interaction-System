@@ -18,7 +18,7 @@ namespace Bipolar.InteractionSystem.Hints.UI
 
         protected override void Refresh(Hint hint)
         {
-            string hintMessage = hint ? hint.Message : null;
+            string hintMessage = hint ? hint.Message : string.Empty;
             Label.enabled = !string.IsNullOrEmpty(hintMessage);
             Label.text = hintMessage;
         }

@@ -1,9 +1,12 @@
-﻿using UnityEngine;
-
-namespace Bipolar.InteractionSystem
+﻿namespace Bipolar.InteractionSystem
 {
-    public abstract class InteractionTrigger : ScriptableObject
+    public interface IInteractionTrigger
     {
-        public abstract bool Check();
+        bool Check();
+    }
+
+    public class InteractionTrigger : Bipolar.Serialized<IInteractionTrigger>, IInteractionTrigger
+    {
+        public bool Check() => Value.Check();
     }
 }
