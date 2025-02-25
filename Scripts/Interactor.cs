@@ -1,21 +1,13 @@
-﻿#if NAUGHTY_ATTRIBUTES
-using NaughtyAttributes;
-#endif
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Bipolar.InteractionSystem
 {
-    public class InteractorBehavior : MonoBehaviour
-    {
-
-    }
+    public delegate void InteractiveObjectChangeEventHandler(InteractiveObject oldObject, InteractiveObject newObject);
+    public delegate void InteractionEventHandler(InteractiveObject interactiveObject, Interaction interaction);
 
     public class Interactor : MonoBehaviour
     {
-        public delegate void InteractiveObjectChangeEventHandler(InteractiveObject oldObject, InteractiveObject newObject);
-        public delegate void InteractionEventHandler(InteractiveObject interactiveObject, Interaction interaction);
-
         public event InteractiveObjectChangeEventHandler OnInteractiveObjectChanged;
         public event InteractionEventHandler OnInteracted;
 
@@ -25,7 +17,7 @@ namespace Bipolar.InteractionSystem
 
         [SerializeField]
 #if NAUGHTY_ATTRIBUTES
-        [ReadOnly]
+        [NaughtyAttributes.ReadOnly]
 #endif
         private InteractiveObject currentInteractiveObject;
         public InteractiveObject CurrentInteractiveObject
@@ -49,7 +41,8 @@ namespace Bipolar.InteractionSystem
                     OnInteracted?.Invoke(CurrentInteractiveObject, interaction);
         }
 
-        public bool TryGetAdditionalBehavior<T>(out T additionalBehavior) where T : InteractorBehavior
+        public bool TryGetAdditionalBehavior<T>(out T additionalBehavior)
+            where T : InteractorBehavior
         {
             foreach (var behavior in additionalBehaviors)
             {
