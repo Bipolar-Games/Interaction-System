@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
-#if BIPOLAR_CORE
 namespace Bipolar.InteractionSystem.Triggers
 {
     [CreateAssetMenu(menuName = "Bipolar/Interaction System/Triggers/Mouse Input Interaction Trigger")]
-    public class MouseInputInteractionTrigger : InteractionTrigger
+    public class MouseInputInteractionTrigger : GlobalInteractionTrigger
     {
         [SerializeField]
-        private MouseButton button;
+        private PointerEventData.InputButton mouseButton;
 
         public override bool Check()
         {
-            return UnityEngine.Input.GetMouseButtonUp((int)button);
+            return UnityEngine.Input.GetMouseButtonUp((int)mouseButton);
         }
     }
 }
-#endif

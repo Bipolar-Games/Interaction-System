@@ -3,7 +3,7 @@
 namespace Bipolar.InteractionSystem.Triggers
 { 
     [CreateAssetMenu(menuName = "Bipolar/Interaction System/Triggers/Key Input Interaction Trigger")]
-    public class KeyInputInteractionTrigger : InteractionTriggerAsset
+    public class KeyInputInteractionTrigger : GlobalInteractionTrigger
     {
         [SerializeField]
         private KeyCode key;

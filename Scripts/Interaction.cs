@@ -6,7 +6,7 @@ namespace Bipolar.InteractionSystem
     public abstract class Interaction : MonoBehaviour
     {
         [SerializeField]
-        private InteractionTriggerAsset trigger;
+        private GlobalInteractionTrigger trigger;
 
         public bool CheckTrigger() => trigger && trigger.Check();
         public abstract void Interact(Interactor interactor);
