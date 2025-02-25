@@ -30,7 +30,7 @@ namespace Bipolar.InteractionSystem
             if (interaction == null)
                 return false;
 
-            return CheckTrigger(interaction) && Interaction.CanInteract(interaction, interactor);
+            return Interaction.CanInteract(interaction, interactor) && CheckTrigger(interaction);
         }
 
         private static bool CheckTrigger(Interaction interaction)
