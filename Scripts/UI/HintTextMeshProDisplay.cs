@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Bipolar.InteractionSystem.Hints.UI
+namespace Bipolar.InteractionSystem
 {
     [RequireComponent(typeof(TMPro.TMP_Text))]
     public class HintTextMeshProDisplay : HintDisplay

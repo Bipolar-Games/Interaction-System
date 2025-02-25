@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bipolar.InteractionSystem.Hints.UI
+namespace Bipolar.InteractionSystem
 {
     public class HintsUIController : MonoBehaviour
     {

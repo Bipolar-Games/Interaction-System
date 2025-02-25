@@ -1,15 +1,12 @@
-﻿#if NAUGHTY_ATTRIBUTES
-using NaughtyAttributes;
-#endif
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Bipolar.InteractionSystem.Hints.UI
+namespace Bipolar.InteractionSystem
 {
     public abstract class HintDisplay : MonoBehaviour
     {
         [SerializeField]
 #if NAUGHTY_ATTRIBUTES
-        [ReadOnly]
+        [NaughtyAttributes.ReadOnly]
 #endif
         private Hint currentHint;
         public Hint CurrentHint
