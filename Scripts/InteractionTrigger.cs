@@ -7,6 +7,7 @@ namespace Bipolar.InteractionSystem
         bool Check();
     }
 
+    [System.Serializable]
     public class InteractionTrigger : Serialized<IInteractionTrigger>, IInteractionTrigger
     {
         public bool Check() => Value.Check();

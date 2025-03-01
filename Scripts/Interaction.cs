@@ -6,19 +6,16 @@ namespace Bipolar.InteractionSystem
     public abstract class Interaction : MonoBehaviour
     {
         [SerializeField]
-        private GlobalInteractionTrigger trigger;
+        private InteractionTrigger trigger;
 
-        public bool CheckTrigger() => trigger && trigger.Check();
+        public bool CheckTrigger() => trigger != null && trigger.Check();
         public abstract void Interact(Interactor interactor);
         public virtual bool CanInteract(in Interactor interactor) => true;
         protected virtual void Start() { }
 
-        public static bool CanInteract(Interaction interaction, Interactor interactor)
-        {
-            if (interaction == null)
-                return false;
-
-            return interaction.isActiveAndEnabled && interaction.CanInteract(interactor);
-        }
+        public static bool CanInteract(Interaction interaction, Interactor interactor) =>
+            interaction != null 
+            && interaction.isActiveAndEnabled 
+            && interaction.CanInteract(interactor);
     }
 }
