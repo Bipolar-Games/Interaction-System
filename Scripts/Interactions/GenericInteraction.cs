@@ -5,9 +5,9 @@ namespace Bipolar.InteractionSystem
 {
     public class GenericInteraction : Interaction
     {
-        [SerializeField]
+        [Space, SerializeField]
         private UnityEvent onInteract;
-
+        
         public override void Interact(Interactor interactor)
         {
             onInteract.Invoke();

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace Bipolar.InteractionSystem.Triggers
 {
-    [CreateAssetMenu(menuName = "Bipolar/Interaction System/Triggers/Mouse Input Interaction Trigger")]
+	[CreateAssetMenu(menuName = "Bipolar/Interaction System/Triggers/Mouse Input Interaction Trigger")]
     public class MouseInputInteractionTrigger : GlobalInteractionTrigger
     {
         [SerializeField]
