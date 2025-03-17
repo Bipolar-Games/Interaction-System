@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Bipolar.InteractionSystem;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Bipolar.Interactions
@@ -7,13 +8,11 @@ namespace Bipolar.Interactions
 	{
 		[SerializeField]
 		private DefaultInteractor interactor;
-
+		
 		[SerializeField]
 		private float detectionRadius;
-
 		[SerializeField]
 		private int maxDetectedObjects;
-
 		[SerializeField]
 		private LayerMask detectedLayers;
 
@@ -75,6 +74,9 @@ namespace Bipolar.Interactions
 
 		private void OnDrawGizmosSelected()
 		{
+			if (enabled == false)
+				return;
+
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawWireSphere(transform.position, detectionRadius);
 		}
