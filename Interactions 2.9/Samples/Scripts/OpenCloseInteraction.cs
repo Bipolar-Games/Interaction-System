@@ -1,10 +1,5 @@
-using Bipolar.Interactions;
 using System.Collections;
 using UnityEngine;
-
-namespace Bipolar.Interactions
-{
-}
 
 namespace Bipolar.Interactions.Samples
 {

@@ -1,0 +1,16 @@
+{
+    "name": "Bipolar.Interactions.Samples",
+    "rootNamespace": "Bipolar.Interactions.Samples",
+    "references": [
+        "GUID:0bfbfc77deb8748429f4842c455e485c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
