@@ -4,20 +4,20 @@ namespace Bipolar.InteractionSystem
 {
     public abstract class HintDisplay : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeReference]
 #if NAUGHTY_ATTRIBUTES
         [NaughtyAttributes.ReadOnly]
 #endif
-        private Hint currentHint;
-        public Hint CurrentHint
+        private IHint currentHint;
+        public IHint CurrentHint
         {
             get => currentHint;
             set
             {
-                if (currentHint)
+                if (currentHint != null)
                     currentHint.OnHintChanged -= Refresh;
                 currentHint = value;
-                if (currentHint)
+                if (currentHint != null)
                 {
                     Refresh(currentHint);
                     currentHint.OnHintChanged += Refresh;
@@ -36,7 +36,7 @@ namespace Bipolar.InteractionSystem
                 currentHint.OnHintChanged += Refresh;
         }
 
-        protected abstract void Refresh(Hint hint);
+        protected abstract void Refresh(IHint hint);
 
         private void OnDisable()
         {

@@ -5,7 +5,7 @@ namespace Bipolar.Interactions
 	public class PlayerInteractorController : MonoBehaviour
 	{
 		[SerializeField]
-		private SingleObjectInteractor interactor;
+		private DefaultInteractor interactor;
 
 		[SerializeField]
 		private InteractionToKeyMapping[] controls;

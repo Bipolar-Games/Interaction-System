@@ -4,13 +4,13 @@ namespace Bipolar.InteractionSystem
 {
     public interface IHint
     {
-        event System.Action<Hint> OnHintChanged;
+        event System.Action<IHint> OnHintChanged;
         string Message { get; set; }
     }
 
     public class Hint : MonoBehaviour, IHint
     {
-        public virtual event System.Action<Hint> OnHintChanged;
+        public virtual event System.Action<IHint> OnHintChanged;
 
         [SerializeField]
         private string message;

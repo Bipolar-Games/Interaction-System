@@ -6,7 +6,7 @@ namespace Bipolar.Interactions
 	public class NearestInteractiveObjectDetector : MonoBehaviour
 	{
 		[SerializeField]
-		private SingleObjectInteractor interactor;
+		private DefaultInteractor interactor;
 
 		[SerializeField]
 		private float detectionRadius;
@@ -62,7 +62,7 @@ namespace Bipolar.Interactions
 				return;
 
 			if (detectedColliders == null)
-				return;
+				return;	
 
 			int oldCount = detectedColliders.Length;
 			if (maxDetectedObjects > oldCount)
@@ -98,8 +98,8 @@ namespace Bipolar.Interactions
 				int currentFrame = Time.frameCount;
 				if (frameNumber != currentFrame)
 				{
-					frameNumber = currentFrame;
 					position = _detectorTransform.position;
+					frameNumber = currentFrame;
 				}
 
 				float leftSqrDistance = (lhs.transform.position - position).sqrMagnitude;
@@ -107,6 +107,5 @@ namespace Bipolar.Interactions
 				return leftSqrDistance.CompareTo(rightSqrDistance);
 			}
 		}
-
 	}
 }

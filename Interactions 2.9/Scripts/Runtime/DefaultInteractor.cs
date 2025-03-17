@@ -3,9 +3,10 @@ using UnityEngine;
 
 namespace Bipolar.Interactions
 {
-	public class SingleObjectInteractor : Interactor
+
+	public class DefaultInteractor : Interactor
 	{
-		public delegate void InteractiveObjectChangedEventHandler (SingleObjectInteractor sender, InteractiveObject oldObject, InteractiveObject newObject);
+		public delegate void InteractiveObjectChangedEventHandler(DefaultInteractor sender, InteractiveObject oldObject, InteractiveObject newObject);
 
 		public event InteractiveObjectChangedEventHandler OnInteractiveObjectChanged;
 
