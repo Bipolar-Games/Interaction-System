@@ -17,6 +17,7 @@ namespace Bipolar.Interactions
 		private InteractiveObject interactiveObject;
 
 		private readonly List<InteractionType> interactions = new List<InteractionType>();
+		public IReadOnlyList<InteractionType> AvailableInteractions => interactions;
 
 		public InteractiveObject InteractiveObject
 		{
@@ -46,7 +47,6 @@ namespace Bipolar.Interactions
 		private void Update()
 		{
 			UpdateAvailableInteractions();
-
 			if (Input.GetKeyDown(KeyCode.Space))
 			{
 				Interact();

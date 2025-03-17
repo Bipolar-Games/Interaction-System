@@ -24,18 +24,23 @@ namespace Bipolar.Interactions
 		private void OnEnable()
 		{
 			if (hintsManager)
-				hintsManager.OnNameHintUpdated += HintsManager_OnNameHintUpdated;
+				hintsManager.OnHintsUpdated += HintsManager_OnHintsUpdated;
 		}
 
-		private void HintsManager_OnNameHintUpdated(IHint hint)
+		private void HintsManager_OnHintsUpdated()
 		{
-			objectNameDisplay.CurrentHint = hint;
+			objectNameDisplay.CurrentHint = hintsManager.InteractiveObjectNameHint;
+			int interactionHintsCount = Mathf.Min(hintDisplays.Count, hintsManager.InteractionsHints.Count);
+			for (int i = 0; i < interactionHintsCount; i++)
+			{
+				hintDisplays[i].CurrentHint = hintsManager.InteractionsHints[i];
+			}
 		}
 
 		private void OnDisable()
 		{
 			if (hintsManager)
-				hintsManager.OnNameHintUpdated -= HintsManager_OnNameHintUpdated;
+				hintsManager.OnHintsUpdated -= HintsManager_OnHintsUpdated;
 		}
 	}
 }
