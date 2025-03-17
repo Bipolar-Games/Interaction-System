@@ -2,8 +2,13 @@ using System.Collections;
 using UnityEngine;
 
 namespace Bipolar.Interactions.Samples
-{
-	public class OpenCloseInteraction : SceneObjectInteraction
+{ 
+	public interface IOpenable
+	{
+		bool IsOpen { get; set; }
+	}
+
+	public class OpenableDoor : MonoBehaviour, IOpenable
 	{
 		[SerializeField]
 		private Transform openedObject;
@@ -20,7 +25,21 @@ namespace Bipolar.Interactions.Samples
 		[Header("States")]
 		[SerializeField]
 		private bool isOpen = false;
-		public bool IsOpen => isOpen;
+		public bool IsOpen
+		{
+			get => isOpen;
+			set
+			{
+				isOpen = value;
+				StopAllCoroutines();
+				StartCoroutine(RotatingCo());
+			}
+		}
+
+		public void Toggle()
+		{
+			IsOpen = !IsOpen;
+		}
 
 		private void Awake()
 		{
@@ -31,13 +50,6 @@ namespace Bipolar.Interactions.Samples
 		{
 			float angle = isOpen ? openAngle : closedAngle;
 			openedObject.localRotation = Quaternion.AngleAxis(angle, Vector3.up);
-		}
-
-		public override void Interact(Interactor interactor, IInteractorInteraction interactorInteraction)
-		{
-			StopAllCoroutines();
-			isOpen = !isOpen;
-			StartCoroutine(RotatingCo());
 		}
 
 		private IEnumerator RotatingCo()

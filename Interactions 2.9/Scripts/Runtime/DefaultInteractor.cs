@@ -40,8 +40,7 @@ namespace Bipolar.Interactions
 			if (descriptor.TryGetInteraction(interaction, out var interactorInteraction) == false)
 				return false;
 
-			InteractiveObject.Interact(interaction, this, interactorInteraction);
-			return true;
+			return InteractiveObject.Interact(interaction, this, interactorInteraction) != null;
 		}
 
 		private void Update()
