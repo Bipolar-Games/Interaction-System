@@ -8,6 +8,16 @@ namespace Bipolar.Interactions
 	{
 		[SerializeField]
 		private DefaultInteractorHintsManager hintsManager;
+		public DefaultInteractorHintsManager HintsManager
+		{
+			get => hintsManager;
+			set
+			{
+				UnsubscribeEvents();
+				hintsManager = value;
+				SubscribeEvents();
+			}
+		}
 
 		[SerializeField]
 		private HintDisplay objectNameDisplay;
@@ -23,6 +33,11 @@ namespace Bipolar.Interactions
 
 		private void OnEnable()
 		{
+			SubscribeEvents();
+		}
+
+		private void SubscribeEvents()
+		{
 			if (hintsManager)
 				hintsManager.OnHintsUpdated += HintsManager_OnHintsUpdated;
 		}
@@ -30,14 +45,19 @@ namespace Bipolar.Interactions
 		private void HintsManager_OnHintsUpdated()
 		{
 			objectNameDisplay.CurrentHint = hintsManager.InteractiveObjectNameHint;
-			int interactionHintsCount = Mathf.Min(hintDisplays.Count, hintsManager.InteractionsHints.Count);
-			for (int i = 0; i < interactionHintsCount; i++)
+			var hints = hintsManager.InteractionsHints;
+			for (int i = 0; i < hintDisplays.Count; i++)
 			{
-				hintDisplays[i].CurrentHint = hintsManager.InteractionsHints[i];
+				hintDisplays[i].CurrentHint = i < hints.Count ? hints[i] : null;
 			}
 		}
 
 		private void OnDisable()
+		{
+			UnsubscribeEvents();
+		}
+
+		private void UnsubscribeEvents()
 		{
 			if (hintsManager)
 				hintsManager.OnHintsUpdated -= HintsManager_OnHintsUpdated;

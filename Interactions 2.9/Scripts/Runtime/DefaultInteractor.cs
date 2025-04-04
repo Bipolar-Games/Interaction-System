@@ -29,6 +29,7 @@ namespace Bipolar.Interactions
 
 				var old = interactiveObject;
 				interactiveObject = value;
+				UpdateAvailableInteractions();
 				OnInteractiveObjectChanged?.Invoke(this, old, value);
 			}
 		}
