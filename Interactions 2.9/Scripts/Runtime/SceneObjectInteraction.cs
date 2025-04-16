@@ -10,6 +10,6 @@ namespace Bipolar.Interactions
 
 		public IReadOnlyList<InteractionType> GetInteractionTypes() => types;
 
-		public abstract void Interact(Interactor interactor, IInteractorInteraction interactorInteraction);
+		public abstract void Interact(Interactor interactor, IInteractionHandler interactorInteraction);
 	}
 }

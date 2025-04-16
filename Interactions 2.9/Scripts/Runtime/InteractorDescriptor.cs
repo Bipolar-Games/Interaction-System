@@ -7,42 +7,42 @@ namespace Bipolar.Interactions
 	public class InteractorDescriptor : MonoBehaviour
 	{
 		[SerializeField]
-		private List<InteractorInteraction> interactions;
+		private List<InteractionHandler> interactionHandlers;
 
-		private readonly Dictionary<InteractionType, IInteractorInteraction> interactionsByType = new Dictionary<InteractionType, IInteractorInteraction>();
+		private readonly Dictionary<InteractionType, IInteractionHandler> interactionHandlersByType = new Dictionary<InteractionType, IInteractionHandler>();
 
 		private void OnEnable()
 		{
-			InteractionTypeUtility.PopulateDictionary(interactions, interactionsByType);
+			InteractionTypeUtility.PopulateDictionary(interactionHandlers, interactionHandlersByType);
 		}
 
-		public bool HasInteraction(InteractionType type) => interactionsByType.ContainsKey(type);
+		public bool CanInteract(InteractionType type) => interactionHandlersByType.ContainsKey(type);
 
-		public bool TryGetInteraction(InteractionType type, out IInteractorInteraction interaction) => interactionsByType.TryGetValue(type, out interaction);
+		public bool TryGetInteractionHandler(InteractionType type, out IInteractionHandler interaction) => interactionHandlersByType.TryGetValue(type, out interaction);
 
-		//public bool AddInteraction(IInteractorInteraction interaction)
+		//public bool AddInteraction(IInteractionHandler interaction)
 		//{
 		//	var interactionType = interaction.GetInteractionTypes();
 		//	if (HasInteraction(interactionType))
 		//		return false;
 
-		//	interactions.Add(new InteractorInteraction { Value = interaction });
-		//	interactionsByType.Add(interactionType, interaction);
+		//	interactionHandlers.Add(new InteractionHandler { Value = interaction });
+		//	interactionHandlersByType.Add(interactionType, interaction);
 		//	return true;
 		//}
 
 		public bool RemoveInteraction(InteractionType type)
 		{
-			if (HasInteraction(type) == false)
+			if (CanInteract(type) == false)
 				return false;
 
-			RemoveInteraction(interactions, type);
-			interactionsByType.Remove(type);
+			RemoveInteraction(interactionHandlers, type);
+			interactionHandlersByType.Remove(type);
 			return true;
 		}
 
 		private static void RemoveInteraction<TInteraction>(List<TInteraction> interactions, InteractionType type) 
-			where TInteraction : IInteractorInteraction
+			where TInteraction : ISerializedInteraction
 		{
 			interactions.RemoveAll(i => i.GetInteractionTypes().Any(t => t == type));
 		}
@@ -58,7 +58,7 @@ namespace Bipolar.Interactions
 		{
 			results.Clear();
 			foreach (var type in interactiveObject.InteractionTypes)
-				if (HasInteraction(type))
+				if (CanInteract(type))
 					results.Add(type);
 		}
 
@@ -66,7 +66,7 @@ namespace Bipolar.Interactions
 		{
 			if (Application.isPlaying)
 			{
-				InteractionTypeUtility.PopulateDictionary(interactions, interactionsByType);
+				InteractionTypeUtility.PopulateDictionary(interactionHandlers, interactionHandlersByType);
 			}
 		}
 	}

@@ -12,9 +12,6 @@ namespace Bipolar.InteractionSystem
         [Space, SerializeField]
         private List<InteractionTrigger> additionalTriggers;
 
-        [SerializeField]
-        private List<Object> normalObjects;
-
         public bool CheckTrigger() => trigger != null && trigger.Check();
         public abstract void Interact(Interactor interactor);
         public virtual bool CanInteract(in Interactor interactor) => true;

@@ -9,8 +9,8 @@ namespace Bipolar.Interactions
 
 	public static class InteractionTypeUtility
 	{
-		public static void PopulateDictionary<TListInteraction, TInteraction>(IList<TListInteraction> interactions, IDictionary<InteractionType, TInteraction> map)
-			where TListInteraction : TInteraction
+		internal static void PopulateDictionary<TListInteraction, TInteraction>(IList<TListInteraction> interactions, IDictionary<InteractionType, TInteraction> map)
+			where TListInteraction : TInteraction, ISerializedInteraction
 			where TInteraction : IInteraction
 		{
 			map.Clear();

@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Bipolar.Interactions
 {
 	public interface IObjectInteraction : IInteraction
 	{
-		void Interact(Interactor interactor, IInteractorInteraction interactorInteraction);
+		void Interact(Interactor interactor, IInteractionHandler interactorInteraction);
 	}
+
 
 	[System.Serializable]
 	public class ObjectInteraction : Serialized<IObjectInteraction>, IObjectInteraction
 	{
-		public IReadOnlyList<InteractionType> GetInteractionTypes() => Value.GetInteractionTypes();
+		[SerializeField]
+		private List<InteractionType> interactionTypes;
 
-		public void Interact(Interactor interactor, IInteractorInteraction interactorInteraction) => Value.Interact(interactor, interactorInteraction);
+		public void Interact(Interactor interactor, IInteractionHandler interactorInteraction) => Value.Interact(interactor, interactorInteraction);
 	}
 }
