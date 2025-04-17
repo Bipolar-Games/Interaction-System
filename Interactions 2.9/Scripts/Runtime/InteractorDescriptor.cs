@@ -36,7 +36,7 @@ namespace Bipolar.Interactions
 			if (CanInteract(type) == false)
 				return false;
 
-			RemoveInteraction(interactionHandlers, type);
+			//RemoveInteraction(interactionHandlers, type);
 			interactionHandlersByType.Remove(type);
 			return true;
 		}

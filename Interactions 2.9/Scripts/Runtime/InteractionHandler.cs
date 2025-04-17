@@ -9,11 +9,6 @@ namespace Bipolar.Interactions
 	{ }
 
 	[System.Serializable]
-	public class InteractionHandler : Serialized<IInteractionHandler>, IInteractionHandler, ISerializedInteraction
-	{
-		public IReadOnlyList<InteractionType> GetInteractionTypes()
-		{
-			throw new System.NotImplementedException();
-		}
-	}
+	public class InteractionHandler : Serialized<IInteractionHandler>, IInteractionHandler
+	{ }
 }

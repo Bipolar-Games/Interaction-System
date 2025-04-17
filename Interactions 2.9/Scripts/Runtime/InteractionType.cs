@@ -10,7 +10,7 @@ namespace Bipolar.Interactions
 	public static class InteractionTypeUtility
 	{
 		internal static void PopulateDictionary<TListInteraction, TInteraction>(IList<TListInteraction> interactions, IDictionary<InteractionType, TInteraction> map)
-			where TListInteraction : TInteraction, ISerializedInteraction
+			where TListInteraction : TInteraction
 			where TInteraction : IInteraction
 		{
 			map.Clear();
@@ -23,14 +23,17 @@ namespace Bipolar.Interactions
 					continue;
 				}
 
-				foreach (var type in interaction.GetInteractionTypes())
+				if (interaction is ISerializedInteraction serializedInteraction)
 				{
-					if (type == null || map.ContainsKey(type))
+					foreach (var type in serializedInteraction.GetInteractionTypes())
 					{
-						interactions.RemoveAt(i);
-						continue;
+						if (type == null || map.ContainsKey(type))
+						{
+							interactions.RemoveAt(i);
+							continue;
+						}
+						map.Add(type, interaction);
 					}
-					map.Add(type, interaction);
 				}
 			}
 		}
