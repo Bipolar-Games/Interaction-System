@@ -1,5 +1,4 @@
-﻿using Bipolar.InteractionSystem;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Bipolar.Interactions
@@ -9,8 +8,17 @@ namespace Bipolar.Interactions
 	{
 		public event System.Action<IHint> OnHintChanged;
 
-		[field: SerializeField]
-		public string Message { get; set; }
+		[SerializeField]
+		private string message;
+		public string Message
+		{
+			get => message;
+			set
+			{
+				message = value;
+				OnHintChanged?.Invoke(this);
+			}
+		}
 	}
 
 	public class DefaultInteractorHintsManager : MonoBehaviour
@@ -41,7 +49,7 @@ namespace Bipolar.Interactions
 
 		private void Interactor_OnInteractiveObjectChanged(DefaultInteractor sender, InteractiveObject oldObject, InteractiveObject newObject)
 		{
-			interactiveObjectNameHint = GetNameHint(newObject);
+			SetHint(ref interactiveObjectNameHint, GetNameHint(newObject), InteractiveObjectNameHint_OnHintChanged);
 
 			interactionsHints.Clear();
 			foreach (var interaction in sender.AvailableInteractions)
@@ -52,7 +60,21 @@ namespace Bipolar.Interactions
 			OnHintsUpdated?.Invoke();
 		}
 
-		private IHint GetNameHint(InteractiveObject newObject)
+		private static void SetHint(ref IHint target, IHint newHint, System.Action<IHint> changedAction)
+		{
+			if (target != null)
+				target.OnHintChanged -= changedAction;
+			target = newHint;
+			if (target != null)
+				target.OnHintChanged += changedAction;
+		}
+
+		private void InteractiveObjectNameHint_OnHintChanged(IHint hint)
+		{
+
+		}
+
+		private static IHint GetNameHint(InteractiveObject newObject)
 		{
 			if (newObject == null)
 				return null;
