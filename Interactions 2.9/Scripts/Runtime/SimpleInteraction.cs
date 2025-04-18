@@ -1,11 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Bipolar.Interactions
 {
 	[CreateAssetMenu(menuName = Paths.Root + "Simple Interaction")]
-	public class SimpleInteraction : InteractionType, IObjectInteraction, IInteractionHandler
+	public class SimpleInteraction : InteractionType, IObjectInteraction, IInteractorInteraction
 	{
-		public virtual void Interact(Interactor interactor, IInteractionHandler interactorInteraction)
+        public IEnumerable<InteractionType> GetInteractionTypes()
+        {
+            yield return this;
+        }
+
+        public virtual void Interact(Interactor interactor, IInteractorInteraction interactorInteraction)
 		{
 			Debug.Log($"Interacted with {name}");
 		}

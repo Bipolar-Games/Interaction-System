@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Bipolar.Interactions
 {
-
 	public class DefaultInteractor : Interactor
 	{
 		public delegate void InteractiveObjectChangedEventHandler(DefaultInteractor sender, InteractiveObject oldObject, InteractiveObject newObject);
@@ -13,22 +12,23 @@ namespace Bipolar.Interactions
 		[SerializeField]
 		private InteractorDescriptor descriptor;
 
+		[Space]
 		[SerializeField]
-		private InteractiveObject interactiveObject;
+		private InteractiveObject currentInteractiveObject;
 
 		private readonly List<InteractionType> interactions = new List<InteractionType>();
 		public IReadOnlyList<InteractionType> AvailableInteractions => interactions;
 
 		public InteractiveObject InteractiveObject
 		{
-			get => interactiveObject;
+			get => currentInteractiveObject;
 			set
 			{
-				if (interactiveObject == value)
+				if (currentInteractiveObject == value)
 					return;
 
-				var old = interactiveObject;
-				interactiveObject = value;
+				var old = currentInteractiveObject;
+				currentInteractiveObject = value;
 				UpdateAvailableInteractions();
 				OnInteractiveObjectChanged?.Invoke(this, old, value);
 			}
@@ -39,19 +39,10 @@ namespace Bipolar.Interactions
 			if (InteractiveObject == null)
 				return false;
 
-			if (descriptor.TryGetInteractionHandler(interaction, out var interactorInteraction) == false)
+			if (descriptor.TryGetInteraction(interaction, out var interactorInteraction) == false)
 				return false;
 
 			return InteractiveObject.Interact(interaction, this, interactorInteraction) != null;
-		}
-
-		private void Update()
-		{
-			UpdateAvailableInteractions();
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
-				Interact();
-			}
 		}
 
 		private void UpdateAvailableInteractions()
@@ -66,10 +57,10 @@ namespace Bipolar.Interactions
 		[ContextMenu("Interact")]
 		private void InteractInEditor()
 		{
-			Interact();
+			InteractWithFirstInteraction();
 		}
 
-		private void Interact(int interactionIndex = 0)
+		private void InteractWithFirstInteraction(int interactionIndex = 0)
 		{
 			if (interactions.Count > 0 && InteractiveObject)
 			{
