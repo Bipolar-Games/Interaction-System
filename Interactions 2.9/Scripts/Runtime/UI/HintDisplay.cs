@@ -15,12 +15,12 @@ namespace Bipolar.Interactions.UI
             set
             {
                 if (currentHint != null)
-                    currentHint.OnHintChanged -= Refresh;
+                    currentHint.OnChanged -= Refresh;
                 currentHint = value;
                 if (currentHint != null)
                 {
                     Refresh(currentHint);
-                    currentHint.OnHintChanged += Refresh;
+                    currentHint.OnChanged += Refresh;
                 }
                 else
                 {
@@ -33,7 +33,7 @@ namespace Bipolar.Interactions.UI
         {
             Refresh(currentHint);
             if (currentHint != null)
-                currentHint.OnHintChanged += Refresh;
+                currentHint.OnChanged += Refresh;
         }
 
         protected abstract void Refresh(IHint hint);
@@ -41,7 +41,7 @@ namespace Bipolar.Interactions.UI
         private void OnDisable()
         {
             if (currentHint != null)
-                currentHint.OnHintChanged -= Refresh;
+                currentHint.OnChanged -= Refresh;
         }
     }
 }

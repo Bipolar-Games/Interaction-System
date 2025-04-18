@@ -6,17 +6,17 @@ namespace Bipolar.Interactions
 	[System.Serializable]
 	public struct BasicHint : IHint
 	{
-		public event System.Action<IHint> OnHintChanged;
+		public event System.Action<IHint> OnChanged;
 
 		[SerializeField]
 		private string message;
 		public string Message
 		{
-			get => message;
+			readonly get => message;
 			set
 			{
 				message = value;
-				OnHintChanged?.Invoke(this);
+				OnChanged?.Invoke(this);
 			}
 		}
 	}
@@ -63,10 +63,10 @@ namespace Bipolar.Interactions
 		private static void SetHint(ref IHint target, IHint newHint, System.Action<IHint> changedAction)
 		{
 			if (target != null)
-				target.OnHintChanged -= changedAction;
+				target.OnChanged -= changedAction;
 			target = newHint;
 			if (target != null)
-				target.OnHintChanged += changedAction;
+				target.OnChanged += changedAction;
 		}
 
 		private void InteractiveObjectNameHint_OnHintChanged(IHint hint)
