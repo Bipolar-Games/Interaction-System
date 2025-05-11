@@ -1,18 +1,11 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Bipolar.InteractionSystem
 {
     [DisallowMultipleComponent]
     public abstract class Interaction : MonoBehaviour
     {
-        [Space, SerializeField]
-        private InteractionTrigger trigger;
-        
-        [Space, SerializeField]
-        private List<InteractionTrigger> additionalTriggers;
-
-        public bool CheckTrigger() => trigger != null && trigger.Check();
+        public bool CheckTrigger() => false;
         public abstract void Interact(Interactor interactor);
         public virtual bool CanInteract(in Interactor interactor) => true;
         protected virtual void Start() { }

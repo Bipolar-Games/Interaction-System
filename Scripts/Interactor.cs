@@ -12,10 +12,6 @@ namespace Bipolar.InteractionSystem
         public event InteractionEventHandler OnInteracted;
 
         [SerializeField]
-        private List<InteractorBehavior> additionalBehaviors;
-        public List<InteractorBehavior> AdditionalBehaviors => additionalBehaviors;
-
-        [SerializeField]
 #if NAUGHTY_ATTRIBUTES
         [NaughtyAttributes.ReadOnly]
 #endif
@@ -39,21 +35,6 @@ namespace Bipolar.InteractionSystem
             if (CurrentInteractiveObject && CurrentInteractiveObject.isActiveAndEnabled)
                 if (CurrentInteractiveObject.TryInteract(this, out var interaction))
                     OnInteracted?.Invoke(CurrentInteractiveObject, interaction);
-        }
-
-        public bool TryGetAdditionalBehavior<T>(out T additionalBehavior)
-            where T : InteractorBehavior
-        {
-            foreach (var behavior in additionalBehaviors)
-            {
-                if (behavior.isActiveAndEnabled && behavior is T correct)
-                {
-                    additionalBehavior = correct;
-                    return true;
-                }
-            }
-            additionalBehavior = null;
-            return false;
         }
     }
 }
