@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace Bipolar.Interactions
+namespace Bipolar.InteractionSystem
 {
 	public class GenericObjectInteraction : SceneObjectInteraction
 	{

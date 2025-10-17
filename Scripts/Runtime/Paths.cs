@@ -1,4 +1,4 @@
-﻿namespace Bipolar.Interactions
+﻿namespace Bipolar.InteractionSystem
 {
 	internal static class Paths
 	{

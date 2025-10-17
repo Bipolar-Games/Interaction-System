@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Bipolar.Interactions.UI
+namespace Bipolar.InteractionSystem.UI
 {
     public abstract class HintDisplay : MonoBehaviour
     {

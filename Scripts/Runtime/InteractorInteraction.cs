@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bipolar.Interactions
+namespace Bipolar.InteractionSystem
 {
 	public interface IInteractorInteraction : IInteraction
 	{ }

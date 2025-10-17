@@ -1,8 +1,7 @@
-﻿using Bipolar.InteractionSystem;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bipolar.Interactions
+namespace Bipolar.InteractionSystem
 {
 	public class NearestInteractiveObjectDetector : MonoBehaviour
 	{
@@ -86,13 +85,13 @@ namespace Bipolar.Interactions
 			private readonly Transform _detectorTransform;
 			private int frameNumber;
 
-			private Vector3 position;
+			private Vector3 detectorPosition;
 
 			public InteractiveObjectsDistanceComparer(Transform detectorTransform)
 			{
 				_detectorTransform = detectorTransform;
 				frameNumber = Time.frameCount;
-				position = detectorTransform.position;
+				detectorPosition = _detectorTransform.position;
 			}
 
 			public int Compare(InteractiveObject lhs, InteractiveObject rhs)
@@ -100,12 +99,12 @@ namespace Bipolar.Interactions
 				int currentFrame = Time.frameCount;
 				if (frameNumber != currentFrame)
 				{
-					position = _detectorTransform.position;
+					detectorPosition = _detectorTransform.position;
 					frameNumber = currentFrame;
 				}
 
-				float leftSqrDistance = (lhs.transform.position - position).sqrMagnitude;
-				float rightSqrDistance = (rhs.transform.position - position).sqrMagnitude;
+				float leftSqrDistance = (lhs.transform.position - detectorPosition).sqrMagnitude;
+				float rightSqrDistance = (rhs.transform.position - detectorPosition).sqrMagnitude;
 				return leftSqrDistance.CompareTo(rightSqrDistance);
 			}
 		}

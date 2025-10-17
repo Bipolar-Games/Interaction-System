@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Bipolar.Interactions.Samples
+namespace Bipolar.InteractionSystem.Samples
 {
 	public class TalkInteraction : SceneObjectInteraction
 	{

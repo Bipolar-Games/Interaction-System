@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bipolar.Interactions
+namespace Bipolar.InteractionSystem
 {
 	[CreateAssetMenu(menuName = Paths.Root + "Simple Interaction")]
 	public class SimpleInteraction : InteractionType, IObjectInteraction, IInteractorInteraction

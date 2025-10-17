@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Bipolar.Interactions
+namespace Bipolar.InteractionSystem
 {
     public interface IHint
     {

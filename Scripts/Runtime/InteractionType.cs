@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bipolar.Interactions
+namespace Bipolar.InteractionSystem
 {
     [CreateAssetMenu(menuName = Paths.Root + "Interaction Type")]
     public class InteractionType : ScriptableObject

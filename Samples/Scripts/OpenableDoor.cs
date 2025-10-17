@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Bipolar.Interactions.Samples
+namespace Bipolar.InteractionSystem.Samples
 { 
 	public interface IOpenable
 	{
