@@ -2,6 +2,6 @@
 {
 	internal static class Paths
 	{
-		public const string Root = "Bipolar/Interaction System 2/";
+		public const string Root = "Bipolar/Interaction System/";
 	}
 }
