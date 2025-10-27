@@ -12,6 +12,7 @@ namespace Bipolar.InteractionSystem
 
         private void OnEnable()
         {
+            interactionsByType.Clear();
             foreach (var interaction in interactions)
                 foreach (var type in interaction.GetInteractionTypes())
                     interactionsByType.Add(type, interaction);

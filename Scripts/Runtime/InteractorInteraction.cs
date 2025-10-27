@@ -9,5 +9,6 @@ namespace Bipolar.InteractionSystem
     public class InteractorInteraction : Serialized<IInteractorInteraction>, IInteractorInteraction
     {
         public IEnumerable<InteractionType> GetInteractionTypes() => Value.GetInteractionTypes();
+        public override string ToString() => Value.ToString();
     }
 }
