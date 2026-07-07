@@ -9,7 +9,7 @@ namespace Bipolar.InteractionSystem
 	}
 
 	[System.Serializable]
-	public class ObjectInteraction : Serialized<IObjectInteraction>, IObjectInteraction
+	public class ObjectInteraction : SerializedInterface<IObjectInteraction>, IObjectInteraction
 	{
         public IEnumerable<InteractionType> GetInteractionTypes() => Value.GetInteractionTypes();
 
