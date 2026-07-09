@@ -6,26 +6,27 @@ namespace Bipolar.RaycastSystem
 {
     public class RaycastTarget : MonoBehaviour
     {
-        public event Action OnRayEnter;
-        public event Action OnRayExit;
+        public event Action OnRayEntered;
+        public event Action OnRayExited;
 
         [SerializeField]
         private UnityEvent onRayEnter;
         [SerializeField]
         private UnityEvent onRayExit;
 
-        private void Start() { }
-
-        public void RayEnter()
+#if UNITY_EDITOR && !UNITY_6000_0_OR_NEWER
+        private void Start() { } // required for "enabled" toggle showing up in inspector 
+#endif
+        internal void RayEnter()
         { 
             onRayEnter.Invoke();
-            OnRayEnter?.Invoke();
+            OnRayEntered?.Invoke();
         }
 
-        public void RayExit()
+        internal void RayExit()
         {
             onRayExit.Invoke();
-            OnRayExit?.Invoke();
+            OnRayExited?.Invoke();
         }
     }
 }

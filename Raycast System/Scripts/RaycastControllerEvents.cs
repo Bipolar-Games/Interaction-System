@@ -24,12 +24,12 @@ namespace Bipolar.RaycastSystem
             raycastController.OnRayExited += CallExitEvent;
         }
 
-        private void CallEnterEvent(RaycastTarget target)
+        private void CallEnterEvent(RaycastController raycaster, RaycastTarget target)
         {
             onRayEnter.Invoke(target);
         }
 
-        private void CallExitEvent(RaycastTarget target)
+        private void CallExitEvent(RaycastController raycaster, RaycastTarget target)
         {
             onRayExit.Invoke(target);
         }

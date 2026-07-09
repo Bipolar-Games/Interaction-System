@@ -9,7 +9,7 @@ namespace Bipolar.RaycastSystem
 
     public class RaycastController : MonoBehaviour
     {
-        public delegate void RaycastTargetChangeEventHandler(RaycastTarget target);
+        public delegate void RaycastTargetChangeEventHandler(RaycastController raycaster, RaycastTarget target);
 
         public event RaycastTargetChangeEventHandler OnRayEntered;
         public event RaycastTargetChangeEventHandler OnRayExited;
@@ -118,7 +118,7 @@ namespace Bipolar.RaycastSystem
         {
             if (target != null)
             {
-                OnRayEntered?.Invoke(target);
+                OnRayEntered?.Invoke(this, target);
                 target.RayEnter();
             }
         }
@@ -127,7 +127,7 @@ namespace Bipolar.RaycastSystem
         {
             if (target != null)
             {
-                OnRayExited?.Invoke(target);
+                OnRayExited?.Invoke(this, target);
                 target.RayExit();
             }
         }
