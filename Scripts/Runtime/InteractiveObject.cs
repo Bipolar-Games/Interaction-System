@@ -12,13 +12,13 @@ namespace Bipolar.InteractionSystem
 
 		public ICollection<InteractionType> InteractionTypes => interactionsByType.Keys;
 
-		public IObjectInteraction Interact(InteractionType type, Interactor interactor, IInteractorInteraction interactorInteraction)
+		public IObjectInteraction Interact(InteractionType type, Interactor interactor, IInteractorBehavior behavior)
 		{
 			var interaction = GetInteraction(type);
 			if (interaction == null)
 				return null;
 
-			interaction.Interact(interactor, interactorInteraction); 
+			interaction.Interact(interactor, behavior); 
 			return interaction;
 		}
 

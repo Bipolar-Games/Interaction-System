@@ -8,7 +8,7 @@ namespace Bipolar.InteractionSystem
 		[SerializeField]
 		private UnityEvent interactAction;
 
-		public override void Interact(Interactor interactor, IInteractorInteraction interactorInteraction)
+		public override void Interact(Interactor interactor, IInteractorBehavior behavior)
 		{
 			interactAction.Invoke();
 		}

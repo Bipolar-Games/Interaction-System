@@ -2,11 +2,11 @@
 
 namespace Bipolar.InteractionSystem
 {
-	public interface IInteractorInteraction : IInteraction
+	public interface IInteractorBehavior : IInteraction
 	{ }
 
     [System.Serializable]
-    public class InteractorInteraction : SerializedInterface<IInteractorInteraction>, IInteractorInteraction
+    public class InteractorBehavior : SerializedInterface<IInteractorBehavior>, IInteractorBehavior
     {
         public IEnumerable<InteractionType> GetInteractionTypes() => Value.GetInteractionTypes();
         public override string ToString() => Value.ToString();

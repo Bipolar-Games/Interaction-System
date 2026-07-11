@@ -9,10 +9,11 @@ namespace Bipolar.InteractionSystem
 
 		public event InteractiveObjectChangedEventHandler OnInteractiveObjectChanged;
 
+		[Header("Settings")]
 		[SerializeField]
 		private InteractorDescriptor descriptor;
 
-		[Space]
+		[Header("States")]
 		[SerializeField]
 		private InteractiveObject currentInteractiveObject;
 
@@ -39,7 +40,7 @@ namespace Bipolar.InteractionSystem
 			if (InteractiveObject == null)
 				return false;
 
-			if (descriptor.TryGetInteraction(interaction, out var interactorInteraction) == false)
+			if (descriptor.TryGetBehavior(interaction, out var interactorInteraction) == false)
 				return false;
 
 			return InteractiveObject.Interact(interaction, this, interactorInteraction) != null;
@@ -51,7 +52,7 @@ namespace Bipolar.InteractionSystem
 			if (InteractiveObject == null)
 				return;
 
-			descriptor.GetAvailableInteractions(InteractiveObject, interactions);
+			descriptor.GetAvailableBehaviors(InteractiveObject, interactions);
 		}
 
 		[ContextMenu("Interact")]
