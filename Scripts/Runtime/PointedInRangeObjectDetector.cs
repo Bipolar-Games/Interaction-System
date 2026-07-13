@@ -23,7 +23,8 @@ namespace Bipolar.InteractionSystem
 
 		public InteractiveObject GetPointedInteractiveObject(Ray ray)
 		{
-			if (Physics.Raycast(ray, out var hitInfo, 100, detectedLayers) == false)
+			Debug.DrawRay(ray.origin, ray.direction, Color.orange, 0.01f); 
+			if (Physics.Raycast(ray, out var hitInfo, 2 * maxObjectDistance, detectedLayers) == false)
 				return null;
 
 			var collider = hitInfo.collider;
@@ -35,7 +36,7 @@ namespace Bipolar.InteractionSystem
 				return null;
 
 			float sqrDistance = (interactiveObject.transform.position - transform.position).sqrMagnitude;
-			if (sqrDistance > maxObjectDistance)
+			if (sqrDistance > maxObjectDistance * maxObjectDistance)
 				return null;
 			
 			return interactiveObject;

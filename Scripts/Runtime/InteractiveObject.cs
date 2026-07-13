@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bipolar.InteractionSystem
 {
-	public class InteractiveObject : MonoBehaviour
+	public sealed class InteractiveObject : MonoBehaviour
 	{
 		[SerializeField]
 		private List<ObjectInteraction> interactions;

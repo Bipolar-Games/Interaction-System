@@ -10,7 +10,12 @@ namespace Bipolar.InteractionSystem
 		[SerializeField]
 		private InteractionToKeyMapping[] controls;
 
-		private void Update()
+        private void Reset()
+        {
+			interactor = GetComponentInParent<DefaultInteractor>() ?? GetComponentInChildren<DefaultInteractor>();
+        }
+
+        private void Update()
 		{
 			for (int i = 0; i < controls.Length; i++)
 			{
