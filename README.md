@@ -11,7 +11,6 @@ The module itself never decides what a door or a lamp does. It only connects the
 ## Dependencies
 - [Interface Serialization](https://github.com/Bipolar-Games/Interface-Serialization) (interfaces shown in the Inspector)
 - TextMeshPro and Naughty Attributes: the `Bipolar.InteractionSystem` assembly definition references `Unity.TextMeshPro` and `NaughtyAttributes.Core`, so both must be in the project for it to compile.
-- The Raycast System's `InputSystemFromMouseRayProvider` is compiled only when the Input System package is enabled (`ENABLE_INPUT_SYSTEM`).
 
 ## The idea in one picture
 
@@ -56,7 +55,7 @@ public class DoorInteraction : SceneObjectInteraction
 }
 ```
 
-`GenericObjectInteraction` calls a `UnityEvent` instead, for quick prototyping without code.
+`GenericObjectInteraction` is meant for quick prototyping: the action is wired in the Inspector through a `UnityEvent`, no code needed. For anything that stays in the game, write a proper interaction class.
 
 ### Player side: `Interactor`, `DefaultInteractor`, `InteractorDescriptor`
 - `InteractorDescriptor` lists what the player can do: a list of *interactor behaviors* (`IInteractorBehavior`), each declaring interaction types. A `SimpleInteraction` asset can be used directly as a behavior. A behavior is also passed to the object's interaction, so an interaction can tell *how* it was done.
@@ -84,23 +83,13 @@ They only choose the current object and write it to `DefaultInteractor.Interacti
 3. Door: add `InteractiveObject` with a collider on the same object or a child. Add your `DoorInteraction` component (as above) with the **Open** asset in its `Interaction Types`, then add it to the `InteractiveObject`'s `Interactions`.
 4. Call `interactor.TryInteract(open)` from your input handling (or add `PlayerInteractorController` if you use the legacy Input Manager).
 
-## Raycast System
-
-A separate assembly (`Bipolar.RaycastSystem`) that tells you which object a ray hits, with enter/exit events. It does not depend on the interaction system.
-
-- `RaycastController` casts one ray per frame (`Raycasted Layers`, `Raycast Distance`, trigger handling) and raises `OnRayEntered` / `OnRayExited`. `Target` is the current `RaycastTarget`.
-- `RaycastCollider` goes on the collider that is hit and points to the `RaycastTarget`(s) it belongs to (filled by `Reset` from the parents). Only colliders with this component are detected.
-- `RaycastTarget` exposes `OnRayEntered` / `OnRayExited`.
-- `RaycastControllerEvents` forwards the controller's events to `UnityEvent`s.
-- The ray comes from a `RayProvider` on the controller. Included: `MainCameraForwardRayProvider` (screen centre, typical for first person), `TransformForwardRayProvider`, `InputSystemFromMouseRayProvider` and `InputManagerRayFromMouseProvider` (mouse). Derive from `RayProvider` and return a `Ray` for your own. `controller.SetRayProvider<T>()` adds and assigns one in code.
-
 ## Extending
 - **New action:** new `InteractionType` asset, plus an interaction (component or asset) on objects and a behavior in the descriptor of whoever can do it.
 - **New way to pick the object:** a component that sets `DefaultInteractor.InteractiveObject` (to `null` when nothing is picked).
 - **New way to trigger:** call `DefaultInteractor.TryInteract(type)`.
 
 ## Known limitations
-- The module is not wired to the Raycast System. The only pointing detector aims from the mouse cursor, which does not suit a first-person view with a locked cursor.
+- The only pointing detector aims from the mouse cursor, which does not suit a first-person view with a locked cursor. Write a detector that casts from the camera (or any other transform) and sets `DefaultInteractor.InteractiveObject`.
 - `PlayerInteractorController` and `PointedInRangeObjectDetector` read the legacy `Input` class and throw in projects that use the new Input System only.
 - `NearestInteractiveObjectDetector` keeps the last object when nothing is in range anymore.
 - `Interact` returns nothing, so an object cannot refuse (locked door) or report why.
