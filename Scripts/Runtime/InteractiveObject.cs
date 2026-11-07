@@ -37,7 +37,7 @@ namespace Bipolar.InteractionSystem
 			// The serialized list holds wrappers; the dictionary holds the real interactions.
 			var unwrapped = new List<IObjectInteraction>(interactions.Count);
 			foreach (var wrapper in interactions)
-				unwrapped.Add(wrapper == null ? null : wrapper.Value);
+				unwrapped.Add(wrapper?.Value);
 
 			InteractionTypeUtility.PopulateDictionary(unwrapped, interactionsByType, this);
 		}
