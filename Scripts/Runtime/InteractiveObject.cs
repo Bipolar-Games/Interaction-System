@@ -23,22 +23,23 @@ namespace Bipolar.InteractionSystem
 				return null;
 
 			var context = new InteractionContext(interactor, behavior);
-			return interaction.Interact(context) ? Unwrap(interaction) : null;
+			return interaction.Interact(context) ? interaction : null;
 		}
 
 		/// <summary>The interaction that handles the type (your own class or asset), or <c>null</c>.</summary>
 		public IObjectInteraction GetInteraction(InteractionType type) =>
 			type != null && interactionsByType.TryGetValue(type, out var interaction)
-			? Unwrap(interaction)
+			? interaction
 			: null;
-
-		// The list holds serialized-interface wrappers; callers want the real interaction.
-		private static IObjectInteraction Unwrap(IObjectInteraction interaction) =>
-			interaction is ObjectInteraction wrapper ? wrapper.Value : interaction;
 
 		private void OnEnable()
 		{
-			InteractionTypeUtility.PopulateDictionary(interactions, interactionsByType, this);
+			// The serialized list holds wrappers; the dictionary holds the real interactions.
+			var unwrapped = new List<IObjectInteraction>(interactions.Count);
+			foreach (var wrapper in interactions)
+				unwrapped.Add(wrapper == null ? null : wrapper.Value);
+
+			InteractionTypeUtility.PopulateDictionary(unwrapped, interactionsByType, this);
 		}
 	}
 }

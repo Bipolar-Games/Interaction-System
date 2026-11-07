@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace Bipolar.InteractionSystem
 {
-	public class GenericObjectInteraction : SceneObjectInteraction
+	public sealed class GenericObjectInteraction : SceneObjectInteraction
 	{
 		[SerializeField]
 		private UnityEvent interactAction;
