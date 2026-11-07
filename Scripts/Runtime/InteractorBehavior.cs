@@ -8,7 +8,7 @@ namespace Bipolar.InteractionSystem
     [System.Serializable]
     public class InteractorBehavior : SerializedInterface<IInteractorBehavior>, IInteractorBehavior
     {
-        public IEnumerable<InteractionType> GetInteractionTypes() => Value.GetInteractionTypes();
+        public IEnumerable<InteractionType> GetInteractionTypes() => Value == null ? System.Array.Empty<InteractionType>() : Value.GetInteractionTypes();
         public override string ToString() => Value.ToString();
     }
 }

@@ -2,44 +2,57 @@
 
 namespace Bipolar.InteractionSystem
 {
-	public class PointedInRangeObjectDetector : MonoBehaviour
+	/// <summary>
+	/// Chooses the interactive object that a ray hits first, if the hit is within reach of this object.
+	/// By default the ray starts at <see cref="rayOrigin"/> (the camera, a hand...) and goes forward, so it needs
+	/// no input. Override <see cref="GetRay"/> to aim differently, e.g. from a mouse cursor.
+	/// </summary>
+	public class PointedInRangeObjectDetector : InteractiveObjectDetector
 	{
+		[Tooltip("Where the ray starts and where it points (its forward). Usually the camera. Empty = this object.")]
 		[SerializeField]
-		private DefaultInteractor interactor;
+		private Transform rayOrigin;
 
+		[Tooltip("How far the player can reach, measured from this object to the point that was hit.")]
 		[SerializeField]
 		private float maxObjectDistance = 2;
 
 		[SerializeField]
 		private LayerMask detectedLayers = -1;
 
-		private Ray ray;
+		[SerializeField]
+		private QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.Ignore;
 
-		private void Update()
+		private Ray lastRay;
+
+		protected override void Reset()
 		{
-			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			interactor.InteractiveObject = GetPointedInteractiveObject(ray);
+			base.Reset();
+			if (Camera.main)
+				rayOrigin = Camera.main.transform;
 		}
 
-		public InteractiveObject GetPointedInteractiveObject(Ray ray)
+		protected override InteractiveObject Detect()
 		{
-			Debug.DrawRay(ray.origin, ray.direction, Color.orange, 0.01f); 
-			if (Physics.Raycast(ray, out var hitInfo, 2 * maxObjectDistance, detectedLayers) == false)
+			lastRay = GetRay();
+
+			// Any point within reach of this object is at most this far from the ray's start.
+			float rayLength = maxObjectDistance + Vector3.Distance(lastRay.origin, transform.position);
+			if (Physics.Raycast(lastRay, out var hit, rayLength, detectedLayers, triggerInteraction) == false)
 				return null;
 
-			var collider = hitInfo.collider;
-			if (collider == null)
+			float sqrReach = (hit.point - transform.position).sqrMagnitude;
+			if (sqrReach > maxObjectDistance * maxObjectDistance)
 				return null;
 
-			var interactiveObject = collider.GetComponentInParent<InteractiveObject>();
-			if (interactiveObject == null)
-				return null;
+			return GetInteractiveObject(hit.collider);
+		}
 
-			float sqrDistance = (interactiveObject.transform.position - transform.position).sqrMagnitude;
-			if (sqrDistance > maxObjectDistance * maxObjectDistance)
-				return null;
-			
-			return interactiveObject;
+		/// <summary>The ray to cast this frame.</summary>
+		protected virtual Ray GetRay()
+		{
+			var origin = rayOrigin ? rayOrigin : transform;
+			return new Ray(origin.position, origin.forward);
 		}
 
 		private void OnDrawGizmosSelected()
@@ -48,7 +61,7 @@ namespace Bipolar.InteractionSystem
 				return;
 
 			Gizmos.color = Color.cyan;
-			Gizmos.DrawLine(ray.origin, ray.origin + ray.direction * 100);
+			Gizmos.DrawLine(lastRay.origin, lastRay.origin + lastRay.direction * (maxObjectDistance + 1));
 
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawWireSphere(transform.position, maxObjectDistance);

@@ -11,7 +11,7 @@ namespace Bipolar.InteractionSystem
 	[System.Serializable]
 	public sealed class ObjectInteraction : SerializedInterface<IObjectInteraction>, IObjectInteraction
 	{
-        public IEnumerable<InteractionType> GetInteractionTypes() => Value.GetInteractionTypes();
+        public IEnumerable<InteractionType> GetInteractionTypes() => Value == null ? System.Array.Empty<InteractionType>() : Value.GetInteractionTypes();
 
         public void Interact(Interactor interactor, IInteractorBehavior behavior) => Value.Interact(interactor, behavior);
 	}

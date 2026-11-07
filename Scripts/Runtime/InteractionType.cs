@@ -9,7 +9,11 @@ namespace Bipolar.InteractionSystem
 
     public static class InteractionTypeUtility
     {
-        internal static void PopulateDictionary<TListInteraction, TInteraction>(IList<TListInteraction> interactions, IDictionary<InteractionType, TInteraction> map)
+        /// <summary>
+        /// Maps every interaction type to the interaction that handles it. Empty slots, missing types and types
+        /// already handled by an earlier interaction are skipped (with a warning) and the list is left untouched.
+        /// </summary>
+        internal static void PopulateDictionary<TListInteraction, TInteraction>(IList<TListInteraction> interactions, IDictionary<InteractionType, TInteraction> map, Object context = null)
             where TListInteraction : TInteraction
             where TInteraction : IInteraction
         {
@@ -19,24 +23,27 @@ namespace Bipolar.InteractionSystem
                 var interaction = interactions[i];
                 if (interaction == null)
                 {
-                    interactions.RemoveAt(i);
+                    Debug.LogWarning($"Interaction {i} is empty.", context);
                     continue;
                 }
 
                 foreach (var type in interaction.GetInteractionTypes())
                 {
-                    if (type == null || map.ContainsKey(type))
+                    if (type == null)
                     {
-                        interactions.RemoveAt(i);
+                        Debug.LogWarning($"Interaction {i} has an empty interaction type.", context);
                         continue;
                     }
+
+                    if (map.ContainsKey(type))
+                    {
+                        Debug.LogWarning($"Interaction type '{type.name}' is handled twice; the first one wins.", context);
+                        continue;
+                    }
+
                     map.Add(type, interaction);
                 }
             }
         }
     }
 }
-
-
-
-

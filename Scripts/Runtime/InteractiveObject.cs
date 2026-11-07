@@ -29,7 +29,7 @@ namespace Bipolar.InteractionSystem
 
 		private void OnEnable()
 		{
-			InteractionTypeUtility.PopulateDictionary(interactions, interactionsByType);
+			InteractionTypeUtility.PopulateDictionary(interactions, interactionsByType, this);
 		}
 	}
 }

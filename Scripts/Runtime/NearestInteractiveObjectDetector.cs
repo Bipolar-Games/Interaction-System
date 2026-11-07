@@ -1,74 +1,64 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Bipolar.InteractionSystem
 {
-	public class NearestInteractiveObjectDetector : MonoBehaviour
+	/// <summary>Chooses the closest interactive object within a radius around this object.</summary>
+	public class NearestInteractiveObjectDetector : InteractiveObjectDetector
 	{
 		[SerializeField]
-		private DefaultInteractor interactor;
-		
-		[SerializeField]
-		private float detectionRadius;
-		[SerializeField]
-		private int maxDetectedObjects;
-		[SerializeField]
-		private LayerMask detectedLayers;
+		private float detectionRadius = 2;
 
-		[Header("States")]
+		[Tooltip("How many colliders are examined at most; closer ones may be missed in a crowd.")]
 		[SerializeField]
-		private Collider[] detectedColliders;
+		private int maxDetectedObjects = 16;
 
 		[SerializeField]
-		private List<InteractiveObject> detectedObjects;
+		private LayerMask detectedLayers = -1;
 
-		private IComparer<InteractiveObject> distanceComparer;
+		[SerializeField]
+		private QueryTriggerInteraction triggerInteraction = QueryTriggerInteraction.Ignore;
 
-		private void OnEnable()
+		private Collider[] detectedColliders = new Collider[0];
+
+		protected override void OnEnable()
 		{
-			distanceComparer = new InteractiveObjectsDistanceComparer(transform);
-			detectedColliders = new Collider[maxDetectedObjects];
+			base.OnEnable();
+			ResizeBuffer();
 		}
 
-		private void Update() => DetectInteractiveObject();
-
-		private void DetectInteractiveObject()
+		protected override InteractiveObject Detect()
 		{
-			detectedObjects.Clear();
-			int count = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, detectedColliders, detectedLayers);
-			if (count <= 0)
-				return;
-			
+			int count = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, detectedColliders, detectedLayers, triggerInteraction);
+
+			InteractiveObject nearest = null;
+			float nearestSqrDistance = float.MaxValue;
 			for (int i = 0; i < count; i++)
 			{
-				var collider = detectedColliders[i];
-				var interactiveObject = collider.GetComponentInParent<InteractiveObject>();
+				var interactiveObject = GetInteractiveObject(detectedColliders[i]);
 				if (interactiveObject == null)
 					continue;
 
-				detectedObjects.Add(interactiveObject);
+				float sqrDistance = (interactiveObject.transform.position - transform.position).sqrMagnitude;
+				if (sqrDistance < nearestSqrDistance)
+				{
+					nearest = interactiveObject;
+					nearestSqrDistance = sqrDistance;
+				}
 			}
-			detectedObjects.Sort(distanceComparer);
+			return nearest;
+		}
 
-			var nearestInteractiveObject = detectedObjects.Count > 0 ? detectedObjects[0] : null;
-			interactor.InteractiveObject = nearestInteractiveObject;
+		private void ResizeBuffer()
+		{
+			int size = Mathf.Max(1, maxDetectedObjects);
+			if (detectedColliders.Length != size)
+				detectedColliders = new Collider[size];
 		}
 
 		private void OnValidate()
 		{
-			if (Application.isPlaying == false)
-				return;
-
-			if (detectedColliders == null)
-				return;	
-
-			int oldCount = detectedColliders.Length;
-			if (maxDetectedObjects > oldCount)
-			{
-				var old = detectedColliders;
-				detectedColliders = new Collider[maxDetectedObjects];
-				System.Array.Copy(old, detectedColliders, oldCount);
-			}
+			if (Application.isPlaying)
+				ResizeBuffer();
 		}
 
 		private void OnDrawGizmosSelected()
@@ -78,35 +68,6 @@ namespace Bipolar.InteractionSystem
 
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawWireSphere(transform.position, detectionRadius);
-		}
-
-		internal struct InteractiveObjectsDistanceComparer : IComparer<InteractiveObject>
-		{
-			private readonly Transform _detectorTransform;
-			private int frameNumber;
-
-			private Vector3 detectorPosition;
-
-			public InteractiveObjectsDistanceComparer(Transform detectorTransform)
-			{
-				_detectorTransform = detectorTransform;
-				frameNumber = Time.frameCount;
-				detectorPosition = _detectorTransform.position;
-			}
-
-			public int Compare(InteractiveObject lhs, InteractiveObject rhs)
-			{
-				int currentFrame = Time.frameCount;
-				if (frameNumber != currentFrame)
-				{
-					detectorPosition = _detectorTransform.position;
-					frameNumber = currentFrame;
-				}
-
-				float leftSqrDistance = (lhs.transform.position - detectorPosition).sqrMagnitude;
-				float rightSqrDistance = (rhs.transform.position - detectorPosition).sqrMagnitude;
-				return leftSqrDistance.CompareTo(rightSqrDistance);
-			}
 		}
 	}
 }
