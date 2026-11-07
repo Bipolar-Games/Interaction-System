@@ -141,6 +141,56 @@ namespace Bipolar.InteractionSystem.Tests
         }
 
         [Test]
+        public void Interactor_PassesItselfAndItsBehaviorToTheInteraction()
+        {
+            var open = NewType("Open");
+            var interactor = NewInteractor(open);
+            interactor.InteractiveObject = NewObject(Vector3.zero, open);
+
+            interactor.TryInteract(open);
+
+            Assert.AreSame(interactor, open.LastInteractor);
+            Assert.IsNotNull(open.LastBehavior);
+            CollectionAssert.Contains(new List<InteractionType>(open.LastBehavior.GetInteractionTypes()), open);
+        }
+
+        [Test]
+        public void Interactor_WhenTheInteractionRefuses_ReportsFailure()
+        {
+            var open = NewType("Open");
+            open.Refuses = true;
+            var interactor = NewInteractor(open);
+            interactor.InteractiveObject = NewObject(Vector3.zero, open);
+
+            Assert.IsFalse(interactor.TryInteract(open));
+            Assert.AreEqual(1, open.Count, "The interaction was asked");
+
+            open.Refuses = false;
+            Assert.IsTrue(interactor.TryInteract(open));
+        }
+
+        [Test]
+        public void CustomInteractor_ReceivesTheInteractionThatWasCarriedOut()
+        {
+            var open = NewType("Open");
+            var locked = NewType("Locked");
+            locked.Refuses = true;
+            var go = new GameObject("Custom");
+            created.Add(go);
+            var interactor = go.AddComponent<CustomInteractor>();
+            interactor.Target = NewObject(Vector3.zero, open, locked);
+
+            Assert.IsTrue(interactor.TryInteract(open));
+            Assert.AreSame(open, interactor.LastPerformed);
+
+            Assert.IsFalse(interactor.TryInteract(locked));
+            Assert.IsNull(interactor.LastPerformed, "A refusal gives null");
+
+            Assert.IsFalse(interactor.TryInteract(NewType("Unknown")));
+            Assert.IsNull(interactor.LastPerformed, "An unknown type gives null");
+        }
+
+        [Test]
         public void Interactor_WithoutAnObject_RefusesToInteract()
         {
             var open = NewType("Open");

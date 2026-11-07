@@ -12,20 +12,29 @@ namespace Bipolar.InteractionSystem
 
 		public ICollection<InteractionType> InteractionTypes => interactionsByType.Keys;
 
-		public IObjectInteraction Interact(InteractionType type, Interactor interactor, IInteractorBehavior behavior)
+		/// <summary>
+		/// Carries out the interaction of the given type. Returns the interaction that was carried out, or <c>null</c>
+		/// when this object does not know the type or the interaction refused. Reached only through
+		/// <see cref="Interactor"/> so that interactions are never triggered around it.
+		/// </summary>
+		internal IObjectInteraction Interact(InteractionType type, Interactor interactor, IInteractorBehavior behavior)
 		{
-			var interaction = GetInteraction(type);
-			if (interaction == null)
+			if (type == null || interactionsByType.TryGetValue(type, out var interaction) == false)
 				return null;
 
-			interaction.Interact(interactor, behavior); 
-			return interaction;
+			var context = new InteractionContext(interactor, behavior);
+			return interaction.Interact(context) ? Unwrap(interaction) : null;
 		}
 
-		public IObjectInteraction GetInteraction(InteractionType type) => 
-			interactionsByType.TryGetValue(type, out var interaction) 
-			? interaction 
+		/// <summary>The interaction that handles the type (your own class or asset), or <c>null</c>.</summary>
+		public IObjectInteraction GetInteraction(InteractionType type) =>
+			type != null && interactionsByType.TryGetValue(type, out var interaction)
+			? Unwrap(interaction)
 			: null;
+
+		// The list holds serialized-interface wrappers; callers want the real interaction.
+		private static IObjectInteraction Unwrap(IObjectInteraction interaction) =>
+			interaction is ObjectInteraction wrapper ? wrapper.Value : interaction;
 
 		private void OnEnable()
 		{

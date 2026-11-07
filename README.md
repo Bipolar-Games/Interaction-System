@@ -59,12 +59,18 @@ public class DoorInteraction : SceneObjectInteraction
     [SerializeField]
     private Door door;
 
-    public override void Interact(Interactor interactor, IInteractorBehavior behavior)
+    public override bool Interact(InteractionContext context)
     {
+        if (door.IsLocked)
+            return false;   // the object refuses
+
         door.Open();
+        return true;
     }
 }
 ```
+
+`Interact` returns `false` when the object refuses (a locked door, a busy machine). The `InteractionContext` says who interacts (`Interactor`) and how (`Behavior`). Only the module can create it, so an interaction cannot be triggered by calling it directly: it goes through an `Interactor`.
 
 `GenericObjectInteraction` is meant for quick prototyping: the action is wired in the Inspector through a `UnityEvent`, no code needed. For anything that stays in the game, write a proper interaction class.
 
@@ -74,9 +80,9 @@ One component holds everything the player needs:
 - `Behaviors`: what the player can do, a list of *interactor behaviors* (`IInteractorBehavior`), each declaring interaction types. A `SimpleInteraction` asset can be used directly as a behavior. The behavior is also passed to the object's interaction, so an interaction can tell *how* it was done. A behavior that needs scene references can be a component and still be listed here.
 - `InteractiveObject`: the **current interactive object**, set by a detector. `OnInteractiveObjectChanged` is raised when it changes.
 - `AvailableInteractions`: the types that both sides know.
-- `TryInteract(InteractionType)` returns `true` if the interaction was carried out.
+- `TryInteract(InteractionType)` returns `true` if the interaction was carried out (the object knows the type and did not refuse).
 
-To use another selection logic, derive from `Interactor` (`TryInteract` is the only abstract method).
+To use another selection logic, derive from `Interactor` (`TryInteract` is the only abstract method). Inside it call the protected `Perform(target, type, behavior)`; it returns the interaction that was carried out, or `null` when the object does not know the type or refused. That is the only way to run an interaction, which keeps interactions from being triggered around an interactor.
 
 ### Detectors
 A detector decides which interactive object the interactor faces. All of them derive from `InteractiveObjectDetector`, which is the whole contract:
@@ -119,6 +125,6 @@ The module does not read input. Call `interactor.TryInteract(type)` from your ow
 - **New way to trigger:** call `DefaultInteractor.TryInteract(type)`.
 
 ## Known limitations
-- `Interact` returns nothing, so an object cannot refuse (locked door) or report why.
+- A refusal is only `false`; the interaction cannot tell the interactor why (it can show or say it itself).
 - Hint texts are the asset/object names; there is no localization hook.
 - `HintsUIManager` throws if its object name display is not assigned.

@@ -5,7 +5,8 @@ namespace Bipolar.InteractionSystem
 {
 	public interface IObjectInteraction : IInteraction
 	{
-		void Interact(Interactor interactor, IInteractorBehavior behavior);
+		/// <summary>Carries the interaction out. Returns <c>false</c> when the object refuses (locked, busy...).</summary>
+		bool Interact(InteractionContext context);
 	}
 
 	[System.Serializable]
@@ -13,7 +14,7 @@ namespace Bipolar.InteractionSystem
 	{
         public IEnumerable<InteractionType> GetInteractionTypes() => Value == null ? System.Array.Empty<InteractionType>() : Value.GetInteractionTypes();
 
-        public void Interact(Interactor interactor, IInteractorBehavior behavior) => Value.Interact(interactor, behavior);
+        public bool Interact(InteractionContext context) => Value != null && Value.Interact(context);
 	}
 
     public abstract class SceneObjectInteraction : MonoBehaviour, IObjectInteraction
@@ -22,7 +23,7 @@ namespace Bipolar.InteractionSystem
         protected InteractionType[] interactionTypes;
         public IEnumerable<InteractionType> GetInteractionTypes() => interactionTypes;
 
-        public abstract void Interact(Interactor interactor, IInteractorBehavior behavior);
+        public abstract bool Interact(InteractionContext context);
     }
 
     public abstract class ObjectInteractionAsset : ScriptableObject, IObjectInteraction
@@ -31,6 +32,6 @@ namespace Bipolar.InteractionSystem
         protected List<InteractionType> interactionTypes;
         public IEnumerable<InteractionType> GetInteractionTypes() => interactionTypes;
 
-        public abstract void Interact(Interactor interactor, IInteractorBehavior behavior);
+        public abstract bool Interact(InteractionContext context);
     }
 }

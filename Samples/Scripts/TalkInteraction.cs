@@ -4,9 +4,10 @@ namespace Bipolar.InteractionSystem.Samples
 {
 	public class TalkInteraction : SceneObjectInteraction
 	{
-		public override void Interact(Interactor interactor, IInteractorBehavior behavior)
+		public override bool Interact(InteractionContext context)
 		{
-			Debug.Log($"{interactor.name} talks with {transform.root.name}");
+			Debug.Log($"{context.Interactor.name} talks with {transform.root.name}");
+			return true;
 		}
 	}
 }

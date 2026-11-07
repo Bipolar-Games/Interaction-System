@@ -11,9 +11,10 @@ namespace Bipolar.InteractionSystem
             yield return this;
         }
 
-        public virtual void Interact(Interactor interactor, IInteractorBehavior behavior)
+        public virtual bool Interact(InteractionContext context)
 		{
 			Debug.Log($"Interacted with {name}");
+			return true;
 		}
 	}
 }

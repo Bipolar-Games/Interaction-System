@@ -64,7 +64,7 @@ namespace Bipolar.InteractionSystem
 			if (TryGetBehavior(interaction, out var behavior) == false)
 				return false;
 
-			return InteractiveObject.Interact(interaction, this, behavior) != null;
+			return Perform(InteractiveObject, interaction, behavior) != null;
 		}
 
 		private void RefreshBehaviors()
@@ -101,7 +101,7 @@ namespace Bipolar.InteractionSystem
 			if (interactions.Count > 0 && InteractiveObject)
 			{
 				var interaction = interactions[interactionIndex];
-				InteractiveObject.Interact(interaction, this, null);
+				Perform(InteractiveObject, interaction, null);
 			}
 		}
 	}

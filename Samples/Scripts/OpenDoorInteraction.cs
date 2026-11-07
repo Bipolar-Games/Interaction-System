@@ -32,9 +32,10 @@ namespace Bipolar.InteractionSystem.Samples
             openedObject.localRotation = Quaternion.AngleAxis(angle, Vector3.up);
         }
 
-        public override void Interact(Interactor interactor, IInteractorBehavior behavior)
+        public override bool Interact(InteractionContext context)
         {
             Toggle();
+            return true;
         }
 
         public void Open()
